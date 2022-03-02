@@ -1,7 +1,4 @@
-
 const ADS_LENGTH = 10;
-
-const AVATAR_NUMBERS = createAvatarNumbers(ADS_LENGTH);
 
 const OFFER_TITLES = [
   'Фрегат',
@@ -31,8 +28,7 @@ const OFFER_TYPES = [
   'hotel'
 ];
 
-const CHECKIN_VARIANTS = ['12:00', '13:00', '14:00'];
-const CHECKOUT_VARIANTS = ['12:00', '13:00', '14:00'];
+const TIME_VARIANTS = ['12:00', '13:00', '14:00'];
 
 const FEATURES = [
   'wifi',
@@ -91,27 +87,6 @@ const getRandomFractional = (min, max, fraction) => {
   return Math.trunc(Math.random() * (max - min + 1) + min) / fractionCorrection;
 };
 
-//Создание массива с номерами аватарок и генерация URL для аватарки
-
-function createAvatarNumbers(length) {
-  const avatarNumbers = [];
-  for (let i = 1; i <= length; i++) {
-    avatarNumbers.push(i);
-  }
-  return avatarNumbers;
-}
-
-const getAvatarUrl = (numbers) => {
-  const numbersLength = numbers.length;
-  if (numbersLength >= 1) {
-    const numberIndex = getRandomInteger(0, numbersLength - 1);
-    const number = numbers.splice(numberIndex, 1);
-    const avatarNumber = number < 10 ? 0 + number.toString() : number.toString();
-    return `img/avatars/user${avatarNumber}.png`;
-  }
-  return 'Изображение не найдено.';
-};
-
 //Получение случайного элемента, неповторяющегося элемента и массива элементов
 
 const getRandomArrayElement = (elements) => {
@@ -142,15 +117,17 @@ const getRandomArrayElements = (allElements) => {
 
 // Создание объявления
 
-const createAdvertisement = () => {
+const createAdvertisement = (idx) => {
   const location = {
     lat: getRandomFractional(LAT_COORDINATES_MIN, LAT_COORDINATES_MAX, LAT_COORDINATES_FRACTION),
     lng: getRandomFractional(LNG_COORDINATES_MIN, LNG_COORDINATES_MAX, LNG_COORDINATES_FRACTION)
   };
 
+  const currentIndex = idx + 1;
+
   return {
     author: {
-      avatar: getAvatarUrl(AVATAR_NUMBERS)
+      avatar: `img/avatars/user${(currentIndex.toString()).padStart(2, '0')}.png`
     },
     offer: {
       address: `${location.lat}, ${location.lng}`,
@@ -159,8 +136,8 @@ const createAdvertisement = () => {
       type: getRandomArrayElement(OFFER_TYPES),
       rooms: getRandomInteger(),
       guests: getRandomInteger(),
-      checkin: getRandomArrayElement(CHECKIN_VARIANTS),
-      checkout: getRandomArrayElement(CHECKOUT_VARIANTS),
+      checkin: getRandomArrayElement(TIME_VARIANTS),
+      checkout: getRandomArrayElement(TIME_VARIANTS),
       features: getRandomArrayElements(FEATURES),
       description: getRandomUniqueArrayElement(DESCRIPTIONS),
       photos: getRandomArrayElements(PHOTOS),
@@ -172,6 +149,4 @@ const createAdvertisement = () => {
   };
 };
 
-const similarAds = Array.from({length: ADS_LENGTH}, createAdvertisement);
-
-console.log(similarAds);
+Array.from({length: ADS_LENGTH}).map((i, idx) => createAdvertisement(idx));
