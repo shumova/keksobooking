@@ -1,6 +1,6 @@
 import {getRandomNumber, getRandomArrayElement, getRandomUniqueArrayElement, getRandomArrayElements} from './util.js';
 
-const ADS_LENGTH = 10;
+const CARDS_LENGTH = 10;
 
 const OFFER_TITLES = [
   'Фрегат',
@@ -30,7 +30,9 @@ const OFFER_TYPES = [
   'hotel'
 ];
 
-const TIME_VARIANTS = ['12:00', '13:00', '14:00'];
+const TIME_VARIANTS = [
+  '12:00', '13:00', '14:00'
+];
 
 const FEATURES = [
   'wifi',
@@ -62,7 +64,7 @@ const PHOTOS = [
 
 // Создание объявления
 
-const createAdvertisement = (index) => {
+const createCard = (index) => {
   const location = {
     lat: getRandomNumber(LAT_COORDINATES_MIN, LAT_COORDINATES_MAX, LAT_COORDINATES_FRACTION),
     lng: getRandomNumber(LNG_COORDINATES_MIN, LNG_COORDINATES_MAX, LNG_COORDINATES_FRACTION)
@@ -94,6 +96,6 @@ const createAdvertisement = (index) => {
   };
 };
 
-const createAds = () => Array.from({length: ADS_LENGTH}).map((i, index) => createAdvertisement(index));
+const createCards = () => Array.from({length: CARDS_LENGTH}).map((i, index) => createCard(index));
 
-export {createAds};
+export {createCards};
