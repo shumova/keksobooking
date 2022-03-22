@@ -1,4 +1,4 @@
-import {getRandomNumber, getRandomArrayElement, getRandomUniqueArrayElement, getRandomArrayElements} from './util.js';
+import {getRandomNumber, getRandomArrayElement, getRandomUniqueArrayElement, getRandomArrayElements} from './utils.js';
 
 const CARDS_LENGTH = 10;
 

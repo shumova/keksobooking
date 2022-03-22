@@ -1,4 +1,4 @@
-import {createCards} from './data.js';
+import {createCards} from './mock.js';
 
 const TYPES = [
   {flat: 'Квартира'},
@@ -17,17 +17,24 @@ const similarListFragment = document.createDocumentFragment();
 
 similarCards.forEach(({author, offer}) => {
   const cardElement = cardTemplate.cloneNode(true);
+  const cardElementChildren = cardElement.children;
+  const cardElementChildrenArray = Array.from(cardElementChildren);
+
+  //константы для блока photos
   const cardElementPhotoContainer = cardElement.querySelector('.popup__photos');
   const cardElementPhotoTemplate = cardElement.querySelector('.popup__photo');
   cardElementPhotoContainer.textContent = '';
-  const cardElementChildren = cardElement.children;
-  const cardElementChildrenArray = Array.from(cardElementChildren);
+
+  //константы для блока features
+  const cardElementFeaturesContainer = cardElement.querySelector('.popup__features');
+  const cardElementFeaturesList = cardElementFeaturesContainer.querySelectorAll('.popup__feature');
+  const offerFeatures = offer.features;
 
   cardElement.querySelector('.popup__title').textContent = offer.title;
 
   cardElement.querySelector('.popup__text--address').textContent = offer.address;
 
-  cardElement.querySelector('.popup__text--price').textContent =  `${offer.price ? offer.price : 'Данные не найдены.'} ₽/ночь`;
+  cardElement.querySelector('.popup__text--price').innerHTML =  `${offer.price ? offer.price : 'Данные не найдены.'} <span>₽/ночь</span>`;
 
   cardElement.querySelector('.popup__type').textContent = TYPES.find((type) => Object.keys(type).includes(offer.type))[offer.type];
 
@@ -35,7 +42,15 @@ similarCards.forEach(({author, offer}) => {
 
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin ? offer.checkin : 'Данные не найдены.'}, выезд до ${offer.checkout ? offer.checkout : 'Данные не найдены.'}`;
 
-  cardElement.querySelector('.popup__features').textContent = offer.features.join(', ');
+  //Неработающая конструкция по оставлению нужных эелементов features
+  cardElementFeaturesList.forEach((cardElementFeatureItem) => {
+    const isNecessary = offerFeatures.some((offerFeature) => {
+      cardElementFeatureItem.classList.contains(`popup__feature--${offerFeature}`);
+    });
+    if (!isNecessary) {
+      cardElementFeatureItem.remove();
+    }
+  });
 
   cardElement.querySelector('.popup__description').textContent = offer.description;
 
@@ -51,11 +66,13 @@ similarCards.forEach(({author, offer}) => {
     if (child.textContent.includes('Данные не найдены.') || (!child.textContent && !child.src && child.children.length === 0)) {
       const childClasses = Array.from(child.classList).join('.');
       const notNecessaryChild = cardElement.querySelector(`.${childClasses}`);
-      notNecessaryChild.classList.add('hidden');
+      notNecessaryChild.remove();
     }
   });
 
   similarListFragment.appendChild(cardElement);
+
 });
 
 map.appendChild(similarListFragment.firstElementChild);
+
