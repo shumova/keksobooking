@@ -23,7 +23,7 @@
 
       <!-- Фильтрация объявлений -->
       <div class="map__filters-container">
-        <form action="#" class="map__filters" autocomplete="off">
+        <form class="map__filters" method="post" enctype="multipart/form-data" action="https://25.javascript.pages.academy/keksobooking" autocomplete="off">
           <select name="housing-type" id="housing-type" class="map__filter">
             <option value="any" selected>Любой тип жилья</option>
             <option value="bungalow">Бунгало</option>
@@ -71,7 +71,7 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form" method="post" enctype="multipart/form-data" autocomplete="off">
+      <form class="ad-form" method="post" enctype="multipart/form-data" action="https://25.javascript.pages.academy/keksobooking" autocomplete="off">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>
           <div class="ad-form-header__upload">
@@ -87,11 +87,14 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио">
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" required minlength="30" maxlength="100"
+          data-pristine-required-message="Обязательное поле"
+          data-pristine-minlength-message="Минимальная длина, символов: 30"
+          data-pristine-maxlength-message="Максимальная длина, символов: 100">
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text">
+          <input id="address" name="address" type="text" disabled>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -105,7 +108,9 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000">
+          <input id="price" name="price" type="number" placeholder="1000" required max="100000"
+          data-pristine-required-message="Обязательное поле"
+          data-pristine-max- message="Максимальная цена, руб.: 100000">
           <div class="ad-form__slider"></div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
@@ -130,7 +135,7 @@
             <option value="100">100 комнат</option>
           </select>
         </fieldset>
-        <fieldset class="ad-form__element">
+        <fieldset class="ad-form__element ad-form__element--capacity">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
             <option value="3" selected>для 3 гостей</option>
@@ -197,7 +202,7 @@
       <img src="" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
       <h3 class="popup__title"></h3>
       <p class="popup__text popup__text--address"></p>
-      <p class="popup__text popup__text--price"></p>
+      <p class="popup__text popup__text--price"><span>₽/ночь</span></p>
       <h4 class="popup__type"></h4>
       <p class="popup__text popup__text--capacity"></p>
       <p class="popup__text popup__text--time"></p>
@@ -211,7 +216,6 @@
       </ul>
       <p class="popup__description"></p>
       <div class="popup__photos">
-        <img src="" class="popup__photo" width="45" height="40" alt="Фотография жилья">
       </div>
     </article>
   </template>
@@ -231,6 +235,7 @@
     </div>
   </template>
 
+  <script src="pristine/pristine.min.js"></script>
   <script src="js/main.js" type="module"></script>
 
 </body>
