@@ -19,31 +19,39 @@ const pristine = new Pristine(adForm, {
   errorTextClass: 'ad-form__error'
 }, false);
 
+const onInputChange = (evt) => {
+  pristine.validate(evt.target);
+};
+
+//для валидации заголовка
+
+const title = adForm.querySelector('#title');
+
 //для валидации цены
 
 const price = adForm.querySelector('#price');
-const minPrice = {
-  'bungalow': 0,
-  'flat': 1000,
-  'hotel': 3000,
-  'house': 5000,
-  'palace': 10000
+const MinPrice = {
+  BUNGALOW: 0,
+  FLAT: 1000,
+  HOTEL: 3000,
+  HOUSE: 5000,
+  PALACE: 10000
 };
 
-function validatePrice (value) {
+const validatePrice = (value) => {
   const unit = adForm.querySelector('[name="type"]');
-  return value.length && value >= minPrice[unit.value];
-}
+  return value.length && value >= MinPrice[unit.value.toUpperCase()];
+};
 
-function getPriceErrorMessage () {
+const getPriceErrorMessage = () => {
   const unit = adForm.querySelector('[name="type"]');
-  return `Минимальная цена, руб.: ${minPrice[unit.value]}`;
-}
+  return `Минимальная цена, руб.: ${MinPrice[unit.value.toUpperCase()]}`;
+};
 
-function onTypeChange () {
-  price.placeholder = minPrice[this.value];
+const onTypeChange = (evt) => {
+  price.placeholder = MinPrice[evt.target.value.toUpperCase()];
   pristine.validate(price);
-}
+};
 
 adForm
   .querySelectorAll('[name="type"]')
@@ -53,8 +61,8 @@ pristine.addValidator(price, validatePrice,getPriceErrorMessage);
 
 //для валидации комнат-вместимости
 
-const roomsField = adForm.querySelector('[name="rooms"]');
-const capacityField = adForm.querySelector('[name="capacity"]');
+const roomsField = adForm.querySelector('#room_number');
+const capacityField = adForm.querySelector('#capacity');
 const roomsOption = {
   '1': ['1'],
   '2': ['1', '2'],
@@ -62,16 +70,13 @@ const roomsOption = {
   '100': ['100']
 };
 
-function validateRooms () {
-  return roomsOption[roomsField.value].includes(capacityField.value);
-}
+const onRoomsChange = () => {
+  pristine.validate(capacityField);
+};
 
-function getRoomsErrorMessage () {
-  return `
-  Максимальная вместимость, человек:
-  ${roomsField.value === '100' ? 'не для гостей' : roomsField.value}
-  `;
-}
+const validateRooms = () => roomsOption[roomsField.value].includes(capacityField.value);
+
+const getRoomsErrorMessage = () => `Максимальная вместимость, человек: ${roomsField.value === '100' ? 'не для гостей' : roomsField.value}`;
 
 pristine.addValidator(roomsField, validateRooms);
 pristine.addValidator(capacityField, validateRooms, getRoomsErrorMessage);
@@ -80,10 +85,10 @@ pristine.addValidator(capacityField, validateRooms, getRoomsErrorMessage);
 const timeInField = adForm.querySelector('#timein');
 const timeOutField = adForm.querySelector('#timeout');
 
-function onTimeChange() {
-  const dependentField = this.id === 'timein' ? timeOutField : timeInField;
-  dependentField.value = this.value;
-}
+const onTimeChange = (evt) => {
+  const dependentField = evt.target.id === 'timein' ? timeOutField : timeInField;
+  dependentField.value = evt.target.value;
+};
 
 timeInField.addEventListener('change', onTimeChange);
 timeOutField.addEventListener('change', onTimeChange);
@@ -96,5 +101,13 @@ activatePage(true);
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
-});
 
+  title.addEventListener('keyup', onInputChange);
+  price.addEventListener('keyup', onInputChange);
+  adForm
+    .querySelectorAll('[name="rooms"]')
+    .forEach((item) => item.addEventListener('change', onRoomsChange));
+  adForm
+    .querySelectorAll('[name="capacity"]')
+    .forEach((item) => item.addEventListener('change', onRoomsChange));
+});

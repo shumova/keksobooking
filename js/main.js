@@ -2,7 +2,7 @@ import './popup.js';
 import './form.js';
 
 import {similarCards} from './mock.js';
-import {ROOMS_TYPE} from './popup.js';
+import {RoomsType} from './popup.js';
 
 const addContent = (element, content) => {
   if (content && !content.includes('undefined'))  {
@@ -24,7 +24,7 @@ const renderCard = ({author, offer}) => {
   cardElement.querySelector('.popup__text--address').textContent = offer.address;
   cardElement.querySelector('.popup__text--price').insertAdjacentHTML('afterbegin', `${offer.price} `);
 
-  addContent(cardElement.querySelector('.popup__type'), ROOMS_TYPE.find((type) => Object.keys(type).includes(offer.type))?.[offer.type]);
+  addContent(cardElement.querySelector('.popup__type'), RoomsType[offer.type.toUpperCase()]);
   addContent(cardElement.querySelector('.popup__description'), offer.description);
   addContent(cardElement.querySelector('.popup__text--capacity'), `${offer.rooms} комнаты для ${offer.guests} гостей`);
   addContent(cardElement.querySelector('.popup__text--time'), `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
@@ -52,10 +52,6 @@ const renderCard = ({author, offer}) => {
       gallery.remove();
     }
   });
-
-  if (!gallery.innerHTML) {
-    gallery.remove();
-  }
 
   similarListFragment.appendChild(cardElement);
   map.appendChild(similarListFragment);
