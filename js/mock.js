@@ -98,4 +98,6 @@ const createCard = (index) => {
 
 const createCards = () => Array.from({length: CARDS_LENGTH}).map((i, index) => createCard(index));
 
-export {createCards};
+const similarCards = createCards();
+
+export {similarCards};

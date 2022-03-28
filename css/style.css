@@ -1028,3 +1028,20 @@ fieldset {
 .hidden {
   display: none;
 }
+
+
+.ad-form__element.has-danger input,
+.ad-form__element.has-danger select {
+  border-color: #ff6d51;
+}
+
+.ad-form__error {
+  z-index: 2;
+  color: #ff6d51;
+}
+
+.ad-form__element--capacity .ad-form__error {
+  position: relative;
+  width: 190%;
+  margin-left: -100%;
+}
