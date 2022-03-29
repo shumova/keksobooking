@@ -1,9 +1,9 @@
-const ROOMS_TYPE = [
-  {flat: 'Квартира'},
-  {bungalow: 'Бунгало'},
-  {house: 'Дом'},
-  {palace: 'Дворец'},
-  {hotel: 'Отель'}
-];
+const RoomsType = {
+  FLAT: 'Квартира',
+  BUNGALOW: 'Бунгало',
+  HOUSE: 'Дом',
+  PALACE: 'Дворец',
+  HOTEL: 'Отель'
+};
 
-export {ROOMS_TYPE};
+export {RoomsType};
