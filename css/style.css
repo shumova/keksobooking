@@ -409,6 +409,8 @@ fieldset {
 
 .ad-form__slider.noUi-target:not(#fake-id) {
   width: calc(100% - 20px);
+  margin-top: 10px;
+  padding: 2px;
   height: 5px;
   transform: translateY(-2px);
 }
@@ -1052,4 +1054,20 @@ fieldset {
 
 .hidden {
   display: none;
+}
+
+.ad-form__error {
+  padding-top: 4px;
+  z-index: 2;
+  color: #ff6d51;
+}
+
+.ad-form__element--capacity .ad-form__error {
+  width: 190%;
+  margin-left: -100%;
+}
+
+.ad-form__element--price .ad-form__error {
+  margin-top: -16px;
+  margin-left: -100%;
 }
