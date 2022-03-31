@@ -55,5 +55,15 @@ const getRandomArrayElements = (allElements) => {
   return offerElements;
 };
 
-export {getRandomNumber, getRandomArrayElement, getRandomUniqueArrayElement, getRandomArrayElements};
+// Проверка и добавление данных в элемент
+
+const addContent = (element, content) => {
+  if (content && !content.includes('undefined'))  {
+    element.textContent = content;
+  } else {
+    element.remove();
+  }
+};
+
+export {getRandomNumber, getRandomArrayElement, getRandomUniqueArrayElement, getRandomArrayElements, addContent};
 
