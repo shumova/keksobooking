@@ -96,7 +96,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" disabled>
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -140,9 +140,9 @@
         <fieldset class="ad-form__element ad-form__element--capacity">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="3" selected>для 3 гостей</option>
+            <option value="3">для 3 гостей</option>
             <option value="2">для 2 гостей</option>
-            <option value="1">для 1 гостя</option>
+            <option value="1" selected>для 1 гостя</option>
             <option value="0">не для гостей</option>
           </select>
         </fieldset>
@@ -234,6 +234,14 @@
     <div class="error">
       <p class="error__message">Ошибка размещения объявления</p>
       <button type="button" class="error__button">Попробовать снова</button>
+    </div>
+  </template>
+
+  <!-- Сообщение об ошибке получения данных -->
+  <template id="data-load-error">
+    <div class="data-load-error">
+      <p class="data-load-error__message">Ошибка загрузки данных</p>
+      <button type="button" class="data-load-error__button">Попробовать снова</button>
     </div>
   </template>
 
