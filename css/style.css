@@ -951,7 +951,8 @@ fieldset {
  */
 
 .success,
-.error {
+.error,
+.data-load-error {
   position: fixed;
   top: 0;
   left: 0;
@@ -973,7 +974,8 @@ fieldset {
 }
 
 .success__message,
-.error__message {
+.error__message,
+.data-load-error__message {
   position: relative;
 
   color: #ffffff;
@@ -982,7 +984,8 @@ fieldset {
 }
 
 .success__message::before,
-.error__message::before {
+.error__message::before,
+.data-load-error__message::before {
   content: "";
   position: absolute;
 
@@ -1001,11 +1004,13 @@ fieldset {
           transform: translateX(-50%);
 }
 
-.error__message::before {
+.error__message::before,
+.data-load-error__message::before {
   background-image: url("../img/muffin-red.svg");
 }
 
-.error__button {
+.error__button,
+.data-load-error__button {
   padding: 10px;
 
   font-size: 22px;
@@ -1021,15 +1026,19 @@ fieldset {
 }
 
 .error__button:hover,
-.error__button:focus {
+.error__button:focus,
+.data-load-error__button:hover,
+.data-load-error__button:focus {
   opacity: 0.8;
 }
 
-.error__button:focus {
+.error__button:focus,
+.data-load-error__button:focus {
   outline: none;
 }
 
-.error__button:active {
+.error__button:active
+.data-load-error__button:active {
   outline: none;
   opacity: 0.6;
 }
@@ -1068,6 +1077,7 @@ fieldset {
 }
 
 .ad-form__element--price .ad-form__error {
+  max-width: 100%;
   margin-top: -16px;
   margin-left: -100%;
 }

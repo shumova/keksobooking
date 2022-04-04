@@ -27,7 +27,7 @@ const getRandomNumber = (min = 0, max = 1000000, fraction = 0) => {
   return Math.trunc(Math.random() * (max - min + 1) + min) / fractionCorrection;
 };
 
-//Получение случайного элемента, неповторяющегося элемента и массива элементов
+// Получение случайного элемента, неповторяющегося элемента и массива элементов
 
 const getRandomArrayElement = (elements) => {
   const elementIndex = getRandomInteger(0, elements.length - 1);
@@ -55,15 +55,36 @@ const getRandomArrayElements = (allElements) => {
   return offerElements;
 };
 
-// Проверка и добавление данных в элемент
+// Проверка нажатой клавиши на Esc
 
-const addContent = (element, content) => {
-  if (content && !content.includes('undefined'))  {
-    element.textContent = content;
-  } else {
-    element.remove();
-  }
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+// Вывод сообщений из шаблонов
+
+const showAlert = (status) => {
+  const alertTemplate = document.querySelector(`#${status}`).content.querySelector(`.${status}`);
+  const alertElement = alertTemplate.cloneNode(true);
+  document.body.append(alertElement);
+
+  document.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    alertElement.remove();
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      alertElement.remove();
+    }
+  });
 };
 
-export {getRandomNumber, getRandomArrayElement, getRandomUniqueArrayElement, getRandomArrayElements, addContent};
+export {
+  getRandomNumber,
+  getRandomArrayElement,
+  getRandomUniqueArrayElement,
+  getRandomArrayElements,
+  isEscapeKey,
+  showAlert
+};
 
