@@ -66,17 +66,33 @@ const showAlert = (status) => {
   const alertElement = alertTemplate.cloneNode(true);
   document.body.append(alertElement);
 
-  document.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    alertElement.remove();
-  });
+  const onDocumentClick = () => {
+    deleteElementAndListeners();
+  };
 
-  document.addEventListener('keydown', (evt) => {
+  const onDocumentKeydown = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      alertElement.remove();
+      deleteElementAndListeners();
     }
-  });
+  };
+
+  function deleteElementAndListeners() {
+    alertElement.remove();
+    document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+  }
+
+  document.addEventListener('click', onDocumentClick);
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
 };
 
 export {
@@ -85,6 +101,7 @@ export {
   getRandomUniqueArrayElement,
   getRandomArrayElements,
   isEscapeKey,
-  showAlert
+  showAlert,
+  debounce
 };
 

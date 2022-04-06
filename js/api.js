@@ -1,5 +1,5 @@
-const getData = (onSuccess, onFail) => {
-  fetch('https://25.javascript.pages.academy/keksobooking/data')
+const getData = (url, onSuccess, onFail) => {
+  fetch(url)
     .then((response) => response.json())
     .then((cards) => onSuccess(cards))
     .catch(() => {
@@ -7,9 +7,9 @@ const getData = (onSuccess, onFail) => {
     });
 };
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (url, onSuccess, onFail, body) => {
   fetch(
-    'https://25.javascript.pages.academy/keksobooking',
+    url,
     {
       method: 'POST',
       body,
