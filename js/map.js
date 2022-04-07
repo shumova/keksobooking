@@ -1,6 +1,6 @@
 import {renderCard} from './render-card.js';
 import {getData} from './api.js';
-import {showAlert} from './utils.js';
+import {showAlert, debounce} from './utils.js';
 import {
   adForm,
   mapFilters,
@@ -104,22 +104,85 @@ const createMarker = (card) => {
     .bindPopup(renderCard(card));
 };
 
+// Данные для фильтрации карточек
+
+const typeFilter = mapFilters.querySelector('#housing-type');
+const priceFilter = mapFilters.querySelector('#housing-price');
+const roomsFilter = mapFilters.querySelector('#housing-rooms');
+const guestsFilter = mapFilters.querySelector('#housing-guests');
+
+const featureFilters = Array.from(mapFilters.querySelectorAll('.map__checkbox'));
+const checkedFeatures = [];
+const updateCheckedFeatures = (feature) => {
+  if (feature.checked) {
+    checkedFeatures.push(feature);
+  } else {
+    if (checkedFeatures.indexOf(feature)) {
+      checkedFeatures.splice(checkedFeatures.indexOf(feature));
+    }
+  }
+};
+
+const isFitType = (card) => (card.offer.type.toString() === typeFilter.value.toString()) || (typeFilter.value.toString() === 'any');
+
+const isFitPrice = (card) => {
+  const cardPrice = card.offer.price;
+  let priceLevel = '';
+  if (cardPrice < 10000) {
+    priceLevel = 'low';
+  } else if (cardPrice >= 10000 & cardPrice < 50000) {
+    priceLevel = 'middle';
+  } else if (cardPrice >= 50000) {
+    priceLevel = 'high';
+  }
+
+  return (priceLevel === priceFilter.value) || (priceFilter.value === 'any');
+};
+
+const isFitRooms = (card) => (card.offer.rooms.toString() === roomsFilter.value.toString()) || (roomsFilter.value.toString() === 'any');
+const isFitGuests = (card) => (card.offer.guests.toString() === guestsFilter.value.toString()) || (guestsFilter.value.toString() === 'any');
+
+const isFitFeatures = (card) => {
+  let isEveryFeature;
+  if (checkedFeatures.length > 0 && card.offer.features) {
+    isEveryFeature = checkedFeatures.every((feature) => card.offer.features.indexOf(feature.value) >= 0);
+  }
+  return (checkedFeatures.length === 0) || isEveryFeature;
+};
+
 const CARDS_LENGTH = 10;
+const CREATION_DELAY = 500;
 
 const setMarkers = () => {
   getData(
-    (cards) => cards.slice(0, CARDS_LENGTH).forEach((card) => createMarker(card)),
-    () => showAlert('data-load-error')
+    'https://25.javascript.pages.academy/keksobooking/data',
+    (cards) => {
+      markerGroup.clearLayers();
+      cards.slice().filter(isFitType).filter(isFitPrice).filter(isFitRooms).filter(isFitGuests).filter(isFitFeatures).slice(0, CARDS_LENGTH).forEach((card) => debounce(createMarker(card), CREATION_DELAY));
+    },
+    () => {
+      showAlert('data-load-error');
+      mapFilters.classList.add('ad-form--disabled');
+    }
   );
 };
 
 setMarkers();
 
-// Очистка данных
-const resetData = () => {
-  markerGroup.clearLayers();
-
+mapFilters.querySelector('#housing-type').addEventListener('change', setMarkers);
+mapFilters.querySelector('#housing-rooms').addEventListener('change', setMarkers);
+mapFilters.querySelector('#housing-guests').addEventListener('change', setMarkers);
+mapFilters.querySelector('#housing-price').addEventListener('change', setMarkers);
+featureFilters.forEach((feature) => feature.addEventListener('change', () => {
+  updateCheckedFeatures(feature);
   setMarkers();
+}));
+
+// Очистка данных
+
+const resetData = () => {
+  adForm.reset();
+  mapFilters.reset();
 
   mainPinMarker.setLatLng({
     lat: COORDS.lat,
@@ -131,21 +194,6 @@ const resetData = () => {
   }, 12);
 
   addressField.value = getCurrentAddress(mainPinMarker);
-  document.querySelector('#title').value = '';
-  document.querySelector('#description').value = '';
-  document.querySelector('#type').value = 'flat';
-  document.querySelector('#price').value = '1000';
-  document.querySelector('#room_number').value = '1';
-  document.querySelector('#capacity').value = '1';
-  document.querySelector('#timein').value = '12:00';
-  document.querySelector('#timeout').value = '12:00';
-  document.querySelectorAll('.features__checkbox').forEach((feature) => {feature.checked = false;});
-
-  document.querySelector('#housing-type').value = 'any';
-  document.querySelector('#housing-price').value = 'any';
-  document.querySelector('#housing-rooms').value = 'any';
-  document.querySelector('#housing-guests').value = 'any';
-  document.querySelectorAll('.map__checkbox').forEach((feature) => {feature.checked = false;});
 };
 
 resetButton.addEventListener('click', (evt) => {
