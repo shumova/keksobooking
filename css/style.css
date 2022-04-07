@@ -600,11 +600,16 @@ fieldset {
 }
 
 .ad-form__photo {
-  margin-right: 10px;
-  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 295px;
+  gap: 10px;
+}
 
+.ad-form__photo-item {
   width: 70px;
   height: 70px;
+  object-fit: contain;
 
   background-color: #e4e4de;
   border-radius: 5px;

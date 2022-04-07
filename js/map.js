@@ -5,8 +5,9 @@ import {
   adForm,
   mapFilters,
   interactiveElements,
-  resetButton
+  resetButton,
 } from './constants.js';
+import {resetPhotos} from './photos.js';
 
 // Блокировка страницы
 
@@ -183,6 +184,7 @@ featureFilters.forEach((feature) => feature.addEventListener('change', () => {
 const resetData = () => {
   adForm.reset();
   mapFilters.reset();
+  resetPhotos();
 
   mainPinMarker.setLatLng({
     lat: COORDS.lat,
