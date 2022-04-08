@@ -9,15 +9,24 @@ import {resetData} from './map.js';
 import {showAlert} from './utils.js';
 import {sendData} from './api.js';
 
-// Для проверки времени заезда-выезда
-
 const timeInField = adForm.querySelector('#timein');
 const timeOutField = adForm.querySelector('#timeout');
+
+const MAX_PRICE = 100000;
 
 const onTimeChange = (evt) => {
   const dependentField = evt.target.id === 'timein' ? timeOutField : timeInField;
   dependentField.value = evt.target.value;
 };
+
+// Блокировка кнопки отправки формы
+
+const blockSubmitButton = (shouldBlock) => {
+  submitButton[shouldBlock ? 'setAttribute' : 'removeAttribute']('disabled', 'disabled');
+  submitButton.textContent = shouldBlock ? 'Публикую' : 'Опубликовать';
+};
+
+// Для проверки времени заезда-выезда
 
 timeInField.addEventListener('change', onTimeChange);
 timeOutField.addEventListener('change', onTimeChange);
@@ -29,7 +38,7 @@ priceField.value = 1000;
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
-    max: 100000,
+    max: MAX_PRICE,
   },
   start: 1000,
   step: 1,
@@ -51,13 +60,6 @@ sliderElement.noUiSlider.on('update', () => {
   validate(priceField);
 });
 
-// Блокировка кнопки отправки формы
-
-const blockSubmitButton = (shouldBlock) => {
-  submitButton[shouldBlock ? 'setAttribute' : 'removeAttribute']('disabled', 'disabled');
-  submitButton.textContent = shouldBlock ? 'Публикую' : 'Опубликовать';
-};
-
 // Обработчик отправки формы
 
 adForm.addEventListener('submit', (evt) => {
@@ -69,6 +71,15 @@ adForm.addEventListener('submit', (evt) => {
       'https://25.javascript.pages.academy/keksobooking',
       () => {
         resetData();
+
+        sliderElement.noUiSlider.updateOptions({
+          range: {
+            min: 0,
+            max: MAX_PRICE,
+          },
+          start: 1000,
+        });
+
         showAlert('success');
         blockSubmitButton(false);
       },

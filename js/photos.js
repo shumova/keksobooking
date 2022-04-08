@@ -2,8 +2,16 @@ const avatarChooser = document.querySelector('.avatar__input');
 const avatarPreview = document.querySelector('.avatar__photo');
 const offerPhotosChooser = document.querySelector('.ad-form__input');
 const offerPhotosPreview = document.querySelector('.ad-form__photo');
-
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const MAX_PHOTO_QUANTITY = 6;
+
+let currentQuantity = 0;
+const resetPhotos = () => {
+  offerPhotosPreview.textContent = '';
+  avatarPreview.src = 'img/muffin-grey.svg';
+  offerPhotosChooser.removeAttribute('disabled', 'disabled');
+  currentQuantity = 0;
+};
 
 avatarChooser.addEventListener('change', () => {
   const file = avatarChooser.files[0];
@@ -14,9 +22,6 @@ avatarChooser.addEventListener('change', () => {
     avatarPreview.src = URL.createObjectURL(file);
   }
 });
-
-const MAX_PHOTO_QUANTITY = 6;
-let currentQuantity = 0;
 
 offerPhotosChooser.addEventListener('change', () => {
   const files = Array.from(offerPhotosChooser.files);
@@ -44,12 +49,5 @@ offerPhotosChooser.addEventListener('change', () => {
     }
   });
 });
-
-const resetPhotos = () => {
-  offerPhotosPreview.textContent = '';
-  avatarPreview.src = 'img/muffin-grey.svg';
-  offerPhotosChooser.removeAttribute('disabled', 'disabled');
-  currentQuantity = 0;
-};
 
 export {resetPhotos};
