@@ -38,12 +38,6 @@ const onTypeChange = (evt) => {
   validate(priceField);
 };
 
-adForm
-  .querySelectorAll('[name="type"]')
-  .forEach((item) => item.addEventListener('change', onTypeChange));
-
-pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
-
 // данные для валидации комнат-вместимости
 
 const roomsField = adForm.querySelector('#room_number');
@@ -59,6 +53,23 @@ const onRoomsChange = () => {
   validate(capacityField);
 };
 
+const validateRooms = () => roomsOption[roomsField.value].includes(capacityField.value);
+
+const getRoomsErrorMessage = () => `Максимальная вместимость, человек: ${roomsField.value === '100' ? 'не для гостей' : roomsField.value}`;
+
+// для валидации формы
+const validateForm = () => pristine.validate();
+
+// валидация цены при смене типа
+
+adForm
+  .querySelectorAll('[name="type"]')
+  .forEach((item) => item.addEventListener('change', onTypeChange));
+
+pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
+
+// валидация комнат-вместимости
+
 adForm
   .querySelectorAll('[name="rooms"]')
   .forEach((item) => item.addEventListener('change', onRoomsChange));
@@ -67,15 +78,7 @@ adForm
   .querySelectorAll('[name="capacity"]')
   .forEach((item) => item.addEventListener('change', onRoomsChange));
 
-const validateRooms = () => roomsOption[roomsField.value].includes(capacityField.value);
-
-const getRoomsErrorMessage = () => `Максимальная вместимость, человек: ${roomsField.value === '100' ? 'не для гостей' : roomsField.value}`;
-
 pristine.addValidator(roomsField, validateRooms);
 pristine.addValidator(capacityField, validateRooms, getRoomsErrorMessage);
-
-// валидация формы
-
-const validateForm = () => pristine.validate();
 
 export {validateForm, validate};
