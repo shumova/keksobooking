@@ -5,14 +5,20 @@ import {
   adForm,
   mapFilters,
   interactiveElements,
-  resetButton,
   filtersForm
-} from './constants.js';
+} from './elements.js';
 import {resetPhotos} from './photos.js';
 import {
   filterCards,
   updateCheckedFeatures
 } from './filters.js';
+
+const Coords = {
+  LAT: 35.652832,
+  LNG: 139.839478,
+};
+
+const CREATION_DELAY = 500;
 
 // Блокировка страницы
 
@@ -22,23 +28,11 @@ const activatePage = (shouldActivate) => {
   interactiveElements.forEach((child) => child[shouldActivate ? 'removeAttribute' : 'setAttribute']('disabled', 'disabled'));
 };
 
-activatePage(false);
-
 // Инициализация карты
-
-const COORDS = {
-  lat: 35.652832,
-  lng: 139.839478,
-};
-
-const CREATION_DELAY = 500;
 let dataCache = [];
-
-// Активация страницы
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    activatePage(true);
     getData(
       'https://25.javascript.pages.academy/keksobooking/data',
       (cards) => {
@@ -50,10 +44,11 @@ const map = L.map('map-canvas')
         mapFilters.classList.add('ad-form--disabled');
       }
     );
+
   })
   .setView({
-    lat: COORDS.lat,
-    lng: COORDS.lng,
+    lat: Coords.LAT,
+    lng: Coords.LNG,
   }, 12);
 
 L.tileLayer(
@@ -73,8 +68,8 @@ const mainPinIcon = L.icon({
 
 const mainPinMarker = L.marker(
   {
-    lat: COORDS.lat,
-    lng: COORDS.lng,
+    lat: Coords.LAT,
+    lng: Coords.LNG,
   },
   {
     draggable: true,
@@ -132,12 +127,12 @@ const resetData = () => {
   setCards();
 
   mainPinMarker.setLatLng({
-    lat: COORDS.lat,
-    lng: COORDS.lng,
+    lat: Coords.LAT,
+    lng: Coords.LNG,
   });
   map.setView({
-    lat: COORDS.lat,
-    lng: COORDS.lng,
+    lat: Coords.LAT,
+    lng: Coords.LNG,
   }, 12);
 
   addressField.value = getCurrentAddress(mainPinMarker);
@@ -146,7 +141,8 @@ const resetData = () => {
 function setCards() {
   markerGroup.clearLayers();
   const filteredData = filterCards(dataCache);
-  filteredData.forEach((card) => createMarker(card), CREATION_DELAY);
+  filteredData.forEach((card) => createMarker(card));
+  activatePage(true);
 }
 
 addressField.value = getCurrentAddress(mainPinMarker);
@@ -156,12 +152,7 @@ mainPinMarker.on('moveend', (evt) => {
   addressField.value = getCurrentAddress(currentAddress);
 });
 
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetData();
-});
-
 // Обработка изменений фильтрации
-filtersForm.addEventListener('change', debounce(onFilterChange, 500));
+filtersForm.addEventListener('change', debounce(onFilterChange, CREATION_DELAY));
 
 export {resetData};

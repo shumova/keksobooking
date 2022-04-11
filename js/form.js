@@ -2,17 +2,18 @@ import {
   adForm,
   sliderElement,
   priceField,
+  resetButton,
   submitButton
-} from './constants.js';
-import {validateForm, validate} from './validate.js';
+} from './elements.js';
+import {validateForm, validate, resetValidation} from './validate.js';
 import {resetData} from './map.js';
 import {showAlert} from './utils.js';
 import {sendData} from './api.js';
 
+const MAX_PRICE = 100000;
+
 const timeInField = adForm.querySelector('#timein');
 const timeOutField = adForm.querySelector('#timeout');
-
-const MAX_PRICE = 100000;
 
 const onTimeChange = (evt) => {
   const dependentField = evt.target.id === 'timein' ? timeOutField : timeInField;
@@ -90,4 +91,17 @@ adForm.addEventListener('submit', (evt) => {
       new FormData(evt.target)
     );
   }
+});
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetData();
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: 0,
+      max: MAX_PRICE,
+    },
+    start: 1000,
+  });
+  resetValidation();
 });
