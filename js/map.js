@@ -34,7 +34,7 @@ let dataCache = [];
 const map = L.map('map-canvas')
   .on('load', () => {
     getData(
-      'https://25.javascript.pages.academy/keksobooking/data',
+      'https://23.javascript.htmlacademy.pro/keksobooking/data',
       (cards) => {
         dataCache = cards;
         setCards();
