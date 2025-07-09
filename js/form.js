@@ -69,7 +69,7 @@ adForm.addEventListener('submit', (evt) => {
   if (isValid) {
     blockSubmitButton(true);
     sendData(
-      'https://25.javascript.pages.academy/keksobooking',
+      'https://23.javascript.htmlacademy.pro/keksobooking',
       () => {
         resetData();
 
